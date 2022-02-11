@@ -103,4 +103,10 @@
       role_id = #{roleId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectUserByPhone" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select <include refid="Base_Column_List"></include>
+    from user
+    where phone_number = #{phone}
+  </select>
 </mapper>
