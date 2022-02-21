@@ -8,4 +8,6 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface RoleDAO extends MyBatisBaseDao<Role, Integer> {
+
+    Role findByName(String roleName);
 }

@@ -8,9 +8,8 @@ public interface UserService {
 
     /**
      * user login interface
-     * @param username
-     * @param password
-     * @return common return data
+     * @param userVO
+     * @return login status
      */
     ReturnData login(UserVO userVO);
 

@@ -9,7 +9,7 @@ import java.io.Serializable;
 public class Role implements Serializable {
     private Integer id;
 
-    private String name;
+    private String roleName;
 
     private static final long serialVersionUID = 1L;
 
@@ -22,11 +22,11 @@ public class Role implements Serializable {
     }
 
     public String getName() {
-        return name;
+        return roleName;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.roleName = name;
     }
 
     @Override
@@ -61,7 +61,7 @@ public class Role implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", name=").append(name);
+        sb.append(", name=").append(roleName);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
