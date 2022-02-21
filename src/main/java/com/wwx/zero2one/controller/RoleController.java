@@ -18,4 +18,14 @@ public class RoleController {
     public ReturnData addRole(@RequestParam("role_name") String roleName) {
         return roleService.addRole(roleName);
     }
+
+    @PostMapping(value = "/alterRole")
+    public ReturnData alterRole(@RequestBody RoleVO roleVO) {
+        return roleService.alterRole(roleVO);
+    }
+
+    @PostMapping(value = "/deleteById")
+    public ReturnData deleteById(@RequestParam("id") Integer id) {
+        return roleService.deleteByPrimaryKey(id);
+    }
 }

@@ -1,6 +1,7 @@
 package com.wwx.zero2one.entity;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * @author 
@@ -10,6 +11,8 @@ public class Role implements Serializable {
     private Integer id;
 
     private String roleName;
+
+    private Integer activate;
 
     private static final long serialVersionUID = 1L;
 
@@ -21,49 +24,41 @@ public class Role implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
+    public String getRoleName() {
         return roleName;
     }
 
-    public void setName(String name) {
-        this.roleName = name;
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
+    public Integer getActivate() {
+        return activate;
+    }
+
+    public void setActivate(Integer activate) {
+        this.activate = activate;
     }
 
     @Override
-    public boolean equals(Object that) {
-        if (this == that) {
-            return true;
-        }
-        if (that == null) {
-            return false;
-        }
-        if (getClass() != that.getClass()) {
-            return false;
-        }
-        Role other = (Role) that;
-        return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()));
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Role role = (Role) o;
+        return Objects.equals(id, role.id) && Objects.equals(roleName, role.roleName) && Objects.equals(activate, role.activate);
     }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
-        return result;
+        return Objects.hash(id, roleName, activate);
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", name=").append(roleName);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
-        sb.append("]");
-        return sb.toString();
+        return "Role{" +
+                "id=" + id +
+                ", roleName='" + roleName + '\'' +
+                ", activate=" + activate +
+                '}';
     }
 }

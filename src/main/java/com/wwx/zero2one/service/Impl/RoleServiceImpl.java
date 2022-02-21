@@ -9,6 +9,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 
 @Service
 public class RoleServiceImpl implements RoleService {
@@ -18,30 +20,38 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public ReturnData addRole(String roleName) {
-
-        if (checkRoleExists(roleName)) {
-            return ReturnData.ok(null, "角色已存在");
-        }
-        Role role = new Role();
-        role.setName(roleName);
-        int id = roleDAO.insert(role);
-        role.setId(id);
+        Role role;
+        Optional<Role> opRole = checkRoleExists(roleName);
+        role = opRole.orElseGet(Role::new);
+        role.setRoleName(roleName);
+        role.setActivate(1);
+//        roleDAO.insertSelective(role);
+        roleDAO.insertOrUpdateByPrimaryKey(role);
         return ReturnData.ok(role, "添加角色成功");
     }
 
-    private boolean checkRoleExists(String roleName) {
-        Role byName = roleDAO.findByName(roleName);
-        return byName != null;
+    private Optional<Role> checkRoleExists(String roleName) {
+        //        Role byName = roleDAO.findByName(roleName);
+        return Optional.ofNullable(roleDAO.findByName(roleName));
     }
 
     @Override
-    public ReturnData alterRole(RoleVO role) {
-        return null;
+    public ReturnData alterRole(RoleVO roleVO) {
+        Role role = new Role();
+        BeanUtils.copyProperties(roleVO, role);
+        roleDAO.updateByPrimaryKey(role);
+        return ReturnData.ok(role, "角色修改成功");
     }
 
     @Override
     public ReturnData deleteByPrimaryKey(Integer pk) {
-        return null;
+        Role role = roleDAO.selectByPrimaryKey(pk);
+        if (role == null) {
+            return ReturnData.ok(null, "不存在指定主键的角色");
+        }
+        role.setActivate(0);
+        roleDAO.updateByPrimaryKeySelective(role);
+        return ReturnData.ok(role, "软删除角色成功");
     }
 
     @Override

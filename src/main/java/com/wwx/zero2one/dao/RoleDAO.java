@@ -10,4 +10,5 @@ import org.apache.ibatis.annotations.Mapper;
 public interface RoleDAO extends MyBatisBaseDao<Role, Integer> {
 
     Role findByName(String roleName);
+    Role insertOrUpdateByPrimaryKey(Role role);
 }
