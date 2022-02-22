@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/role")
 public class RoleController {
 
+    private static Integer pageSize = 10;
+
     @Autowired
     private RoleService roleService;
 
@@ -28,4 +30,10 @@ public class RoleController {
     public ReturnData deleteById(@RequestParam("id") Integer id) {
         return roleService.deleteByPrimaryKey(id);
     }
+
+    @GetMapping(value = "/{pageNumber}")
+    public ReturnData pageSelect(@PathVariable("pageNumber") Integer pageNumber) {
+        return roleService.pageSelect(pageNumber, pageSize);
+    }
+
 }

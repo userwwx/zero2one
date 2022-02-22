@@ -9,6 +9,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -22,11 +23,17 @@ public class RoleServiceImpl implements RoleService {
     public ReturnData addRole(String roleName) {
         Role role;
         Optional<Role> opRole = checkRoleExists(roleName);
-        role = opRole.orElseGet(Role::new);
-        role.setRoleName(roleName);
-        role.setActivate(1);
-//        roleDAO.insertSelective(role);
-        roleDAO.insertOrUpdateByPrimaryKey(role);
+        if (opRole.isPresent()) {
+            role = opRole.get();
+            role.setActivate(1);
+            roleDAO.updateByPrimaryKeySelective(role);
+        } else {
+            role = new Role();
+            role.setRoleName(roleName);
+            role.setActivate(1);
+            roleDAO.insertSelective(role);
+        }
+//        roleDAO.insertOrUpdateByPrimaryKey(role);
         return ReturnData.ok(role, "添加角色成功");
     }
 
@@ -56,11 +63,14 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public ReturnData selectByPrimaryKey(Integer pk) {
-        return null;
+        Role role = roleDAO.selectByPrimaryKey(pk);
+        return ReturnData.ok(role, "查询成功");
     }
 
     @Override
-    public ReturnData pageSelect(Integer PageNumber, Integer pageSize) {
-        return null;
+    public ReturnData pageSelect(Integer pageNumber, Integer pageSize) {
+        Integer startIndex = (pageNumber - 1) * pageSize;
+        List<Role> roleList = roleDAO.PageList(startIndex, pageSize);
+        return ReturnData.ok(roleList, "success");
     }
 }

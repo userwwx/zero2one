@@ -100,5 +100,20 @@
         role_name = #{roleName,jdbcType=VARCHAR},
         activate = #{activate,jdbcType=TINYINT},
   </update>
+  <select id="PageList" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"></include>
+    from role
+    where activate = 1
+    order by id
+    limit #{startIndex}, #{pageSize}
+  </select>
 
+  <select id="selectRolesByPrimaryKey" resultType="com.wwx.zero2one.entity.Role" parameterType="java.util.List">
+    select <include refid="Base_Column_List"></include>
+    from role
+    where id in
+    <foreach collection="roleIds" item="roleId" index="index" open="(" close=")" separator=",">
+      #{roleId}
+    </foreach>
+  </select>
 </mapper>
