@@ -9,7 +9,7 @@ public class ReturnData implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String code;
+    private Integer code;
     private Object data;
     private String message;
 
@@ -17,21 +17,21 @@ public class ReturnData implements Serializable {
 
     }
 
-    public ReturnData(String code, Object data, String message) {
+    public ReturnData(Integer code, Object data, String message) {
         this.code = code;
         this.data = data;
         this.message = message;
     }
 
     public static ReturnData ok(){
-        return new ReturnData("200", null, "success");
+        return new ReturnData(200, null, "success");
     }
 
     public static ReturnData ok(Object data, String message) {
-        return new ReturnData("200", data, message);
+        return new ReturnData(200, data, message);
     }
 
-    public static ReturnData fail(String code, Object data, String message) {
+    public static ReturnData fail(Integer code, Object data, String message) {
         return new ReturnData(code, data, message);
     }
 }
