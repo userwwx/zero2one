@@ -3,10 +3,11 @@
 <mapper namespace="com.wwx.zero2one.dao.RoleDAO">
   <resultMap id="BaseResultMap" type="com.wwx.zero2one.entity.Role">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+    <result column="activate" jdbcType="TINYINT" property="activate" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, `name`
+    id, role_name, activate
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -18,41 +19,101 @@
     delete from role
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.wwx.zero2one.entity.Role">
-    insert into role (id, `name`)
-    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR})
+  <insert id="insert" parameterType="com.wwx.zero2one.entity.Role" useGeneratedKeys="true" keyProperty="id">
+    insert into role (`role_name`)
+    values (#{roleName,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.wwx.zero2one.entity.Role">
+  <insert id="insertSelective" parameterType="com.wwx.zero2one.entity.Role" useGeneratedKeys="true" keyProperty="id">
     insert into role
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
       </if>
-      <if test="name != null">
-        `name`,
+      <if test="roleName != null">
+        role_name,
+      </if>
+      <if test="activate != null">
+        activate,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="name != null">
-        #{name,jdbcType=VARCHAR},
+      <if test="roleName != null">
+        #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="activate != null">
+        #{activate,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.wwx.zero2one.entity.Role">
     update role
     <set>
-      <if test="name != null">
-        `name` = #{name,jdbcType=VARCHAR},
+      <if test="roleName != null">
+        `role_name` = #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="activate != null">
+        activate = #{activate,jdbcType=TINYINT},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.wwx.zero2one.entity.Role">
     update role
-    set `name` = #{name,jdbcType=VARCHAR}
+    set `role_name` = #{roleName,jdbcType=VARCHAR},
+    activate = #{activate,jdbcType=TINYINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="findByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"></include>
+    from role
+    where role_name = #{roleName}
+  </select>
+
+  <update id="insertOrUpdateByPrimaryKey" parameterType="com.wwx.zero2one.entity.Role" useGeneratedKeys="true" keyProperty="id">
+    insert into role
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="roleName != null">
+        role_name,
+      </if>
+      <if test="activate != null">
+        activate
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="roleName != null">
+        #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="activate != null">
+        #{activate,jdbcType=TINYINT}
+      </if>
+    </trim>
+    on duplicate key update
+        role_name = #{roleName,jdbcType=VARCHAR},
+        activate = #{activate,jdbcType=TINYINT},
+  </update>
+  <select id="PageList" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"></include>
+    from role
+    where activate = 1
+    order by id
+    limit #{startIndex}, #{pageSize}
+  </select>
+
+  <select id="selectRolesByPrimaryKey" resultType="com.wwx.zero2one.entity.Role" parameterType="java.util.List">
+    select <include refid="Base_Column_List"></include>
+    from role
+    where id in
+    <foreach collection="roleIds" item="roleId" index="index" open="(" close=")" separator=",">
+      #{roleId}
+    </foreach>
+  </select>
 </mapper>
