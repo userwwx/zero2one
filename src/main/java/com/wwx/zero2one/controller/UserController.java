@@ -3,6 +3,7 @@ package com.wwx.zero2one.controller;
 import com.wwx.zero2one.controller.VO.UserVO;
 import com.wwx.zero2one.service.UserService;
 import com.wwx.zero2one.util.ReturnData;
+import com.wwx.zero2one.util.log.LogAnnotation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +23,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
+    @LogAnnotation(content = "'用户'+ #use.username+', '+#user.password")
     public ReturnData login(@RequestBody UserVO user) {
         return userService.login(user);
     }
