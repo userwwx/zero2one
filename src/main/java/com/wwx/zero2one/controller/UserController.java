@@ -23,7 +23,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    @LogAnnotation(content = "'用户'+ #use.username+', '+#user.password")
+    @LogAnnotation(content = "'用户'+ #user.username+'登录成功'")
     public ReturnData login(@RequestBody UserVO user) {
         return userService.login(user);
     }
